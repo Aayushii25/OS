@@ -1,0 +1,63 @@
+#include <stdio.h>
+void LRU(int pages[], int k, int n)
+{
+int frame[k];
+int counter[k];
+int pageFaults = 0, hits = 0;
+for (int i = 0; i < k; i++) {
+frame[i] = -1;
+counter[i] = 0;
+}
+printf("Incoming \t Frames: ");
+for (int i = 0; i < n; i++){
+int pageFound = 0;
+for (int j = 0; j < k; j++)
+{
+if (frame[j] == pages[i])
+{
+pageFound = 1;
+hits++;
+counter[j] = i + 1;
+break;
+}
+}
+if (!pageFound) {
+int minCounterIndex = 0;
+for (int j = 1; j < k; j++) {
+if (counter[j] < counter[minCounterIndex])
+{
+minCounterIndex = j;
+}
+}
+frame[minCounterIndex] = pages[i];
+counter[minCounterIndex] = i + 1;
+pageFaults++;
+}
+printf("\n");
+printf("%d\t\t", pages[i]);
+for (int j = 0; j < k; j++)
+{
+if (frame[j] != -1)
+printf(" %d\t", frame[j]);
+else
+printf(" - \t");
+}
+}
+printf("\n\nPage Faults: %d\n", pageFaults);
+printf("Hit ratio: %.2f",((double)hits/n));
+}
+int main(void)
+{
+int n, k;
+printf("Enter total elements in array: ");
+scanf("%d", &n);
+int pages[n];
+printf("Enter array: ");
+for (int i = 0; i < n; i++) {
+scanf("%d", &pages[i]);
+}
+printf("Enter page frames: ");
+scanf("%d", &k);
+LRU(pages, k, n);
+return 0;
+}
