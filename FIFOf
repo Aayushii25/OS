@@ -1,0 +1,60 @@
+#include <stdio.h>
+void FCFS(int pages[],int k,int n)
+{
+int m, x, s, pageFaults = 0,hits=0;
+printf("Incoming \t Frames: ");
+int temp[k];
+for(m = 0; m < k; m++)
+{
+temp[m] = -1;
+}
+for(m = 0; m < n; m++)
+{
+s = 0;
+for(x = 0; x < k; x++)
+{
+if(pages[m] == temp[x])
+{
+s++;
+hits++;
+pageFaults--;
+}
+}
+pageFaults++;
+if((pageFaults <= k) && (s == 0))
+{
+temp[m] = pages[m];
+}
+else if(s == 0)
+{
+temp[(pageFaults - 1) % k] = pages[m];
+}
+printf("\n");
+printf("%d\t\t",pages[m]);
+for(x = 0; x < k; x++)
+{
+if(temp[x] != -1)
+printf(" %d\t", temp[x]);
+else
+printf(" - \t");
+}
+}
+printf("\n\nPage Faults: %d \n", pageFaults);
+printf("Hit ratio: %.2f",((double)hits/n));
+}
+int main(void)
+{
+int n,k;
+printf("Enter total elements in array: ");
+scanf("%d",&n);
+int pages[n];
+printf("Enter array: ");
+for(int i=0;i<n;i++)
+{
+scanf("%d",&pages[i]);
+}
+printf("Enter pages Per frames: ");
+scanf("%d",&k);
+FCFS(pages,k,n);
+return 0;
+}
